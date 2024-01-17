@@ -1,2 +1,2 @@
 # calculator
-This is a project provided for studying  coding based on the Python language.
+This is a project provided for the studying  of coding based on the Python language.
