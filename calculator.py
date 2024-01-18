@@ -2,13 +2,17 @@ import tkinter as tk
 
 
 def press_key(event):
-    print(event)
     if event.char.isdigit():
         add_digit(event.char)
     elif event.char in "+-*/.":
         add_digit(event.char)
     elif event == "\r" or "=":
         calc_button()
+
+
+def clear():
+    calc.delete(0, tk.END)
+    calc.insert(0, "0")
 
 
 def sign_switcher():
@@ -90,9 +94,7 @@ def get_sign_button(param):
     )
 
 
-def get_decimal_pot(pot):
-    # TODO:It is necessary to think out of the implementation!!!
-
+def get_decimal_pot_button(pot):
     return tk.Button(
         root,
         text=pot,
@@ -100,6 +102,17 @@ def get_decimal_pot(pot):
         borderwidth=3,
         foreground="blue",
         command=lambda: add_digit(pot),
+    )
+
+
+def get_clear_button(operation):
+    return tk.Button(
+        root,
+        text=operation,
+        font=("Calibri", 13),
+        borderwidth=3,
+        foreground="red",
+        command=lambda: clear(),
     )
 
 
@@ -148,11 +161,11 @@ get_sign_button("+/-").grid(row=6, column=0, sticky="wens", padx=3, pady=3)
 
 # Decimal pot button widget
 
-get_decimal_pot(".").grid(row=6, column=2, sticky="wens", padx=3, pady=3)
+get_decimal_pot_button(".").grid(row=6, column=2, sticky="wens", padx=3, pady=3)
 
 # Clear button widget
 
-get_operation_button("<=").grid(row=1, column=3, sticky="wens", padx=3, pady=3)
+get_clear_button("C").grid(row=1, column=3, sticky="wens", padx=3, pady=3)
 
 # Operation buttons widgets
 
