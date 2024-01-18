@@ -1,19 +1,36 @@
 import tkinter as tk
 
 
+def press_key(event):
+    print(event.char)
+    if event.char.isdigit():
+        add_digit(event.char)
+
+
+def add_digit(digit):
+    value = calc.get()
+    if value[0] == "0":
+        value = value[1:]
+    calc.delete(0, tk.END)
+    calc.insert(0, value + digit)
+
+
 def get_memory_button(memory_mode):
-    # It is necessary to think out of the implementation!!!
+    # TODO: It is necessary to think out of the implementation!!!
 
     return tk.Button(root, text=memory_mode, font=("Calibri", 10), foreground="green")
 
 
 def get_operation_button(operation):
+    # TODO: Provide the functionality of the digit buttons.
+
     return tk.Button(
         root, text=operation, font=("Calibri", 13), borderwidth=3, foreground="red"
     )
 
 
 def get_calc_button(op):
+    # TODO: Provide the functionality of the operation buttons.
     return tk.Button(
         root,
         text=op,
@@ -25,13 +42,19 @@ def get_calc_button(op):
 
 
 def get_digit_button(digit):
+    # TODO: Provide the functionality of the digit buttons
     return tk.Button(
-        root, text=digit, font=("Arial", 13), borderwidth=3, foreground="blue"
+        root,
+        text=digit,
+        font=("Arial", 13),
+        borderwidth=3,
+        foreground="blue",
+        command=lambda: add_digit(digit),
     )
 
 
 def get_sign_button(param):
-    # It is necessary to think out of the implementation!!!
+    # TODO:It is necessary to think out of the implementation!!!
 
     return tk.Button(
         root, text=param, font=("Arial", 13), borderwidth=3, foreground="blue"
@@ -39,7 +62,7 @@ def get_sign_button(param):
 
 
 def get_decimal_pot(param):
-    # It is necessary to think out of the implementation!!!
+    # TODO:It is necessary to think out of the implementation!!!
 
     return tk.Button(
         root, text=param, font=("Arial", 13), borderwidth=3, foreground="blue"
@@ -52,10 +75,15 @@ root.title("Calculator")
 
 root.resizable(False, False)
 
+# Getting binds for all buttons
+
+root.bind("<Key>", press_key)
+
 # Entry widget
 
-calc = tk.Entry(root, width=15, font=("Arial", 15))
-calc.grid(row=0, column=0, sticky="we", columnspan=4, padx=5, pady=5)
+calc = tk.Entry(root, justify=tk.RIGHT, width=15, font=("Arial", 15))
+calc.grid(row=0, column=0, stick="we", columnspan=4, padx=5, pady=5)
+calc.insert(0, "0")
 
 # Memory button widgets
 
@@ -88,9 +116,12 @@ get_sign_button("+/-").grid(row=6, column=0, sticky="wens", padx=3, pady=3)
 
 get_decimal_pot(".").grid(row=6, column=2, sticky="wens", padx=3, pady=3)
 
-# Operation buttons widgets
+# Clear button widget
 
 get_operation_button("<=").grid(row=1, column=3, sticky="wens", padx=3, pady=3)
+
+# Operation buttons widgets
+
 get_operation_button("/").grid(row=2, column=3, sticky="wens", padx=3, pady=3)
 get_operation_button("*").grid(row=3, column=3, sticky="wens", padx=3, pady=3)
 get_operation_button("-").grid(row=4, column=3, sticky="wens", padx=3, pady=3)
@@ -112,5 +143,5 @@ for y in range(5):
 for x in range(7):
     root.grid_rowconfigure(x, minsize=60)
 
-
-root.mainloop()
+if __name__ == "__main__":
+    root.mainloop()
