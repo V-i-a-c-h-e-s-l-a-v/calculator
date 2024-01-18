@@ -5,10 +5,16 @@ def press_key(event):
     print(event)
     if event.char.isdigit():
         add_digit(event.char)
-    elif event.char in "+-*/":
+    elif event.char in "+-*/.":
         add_digit(event.char)
     elif event == "\r" or "=":
         calc_button()
+
+
+def sign_switcher():
+    value = calc.get()
+    calc.delete(0, tk.END)
+    calc.insert(0, -1 * eval(value))
 
 
 def calc_button():
@@ -40,8 +46,6 @@ def get_memory_button(memory_mode):
 
 
 def get_operation_button(operation):
-    # TODO: Provide the functionality of the digit buttons.
-
     return tk.Button(
         root,
         text=operation,
@@ -76,18 +80,26 @@ def get_digit_button(digit):
 
 
 def get_sign_button(param):
-    # TODO:It is necessary to think out of the implementation!!!
-
     return tk.Button(
-        root, text=param, font=("Arial", 13), borderwidth=3, foreground="blue"
+        root,
+        text=param,
+        font=("Arial", 13),
+        borderwidth=3,
+        foreground="blue",
+        command=lambda: sign_switcher(),
     )
 
 
-def get_decimal_pot(param):
+def get_decimal_pot(pot):
     # TODO:It is necessary to think out of the implementation!!!
 
     return tk.Button(
-        root, text=param, font=("Arial", 13), borderwidth=3, foreground="blue"
+        root,
+        text=pot,
+        font=("Arial", 13),
+        borderwidth=3,
+        foreground="blue",
+        command=lambda: add_digit(pot),
     )
 
 
