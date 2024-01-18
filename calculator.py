@@ -2,9 +2,27 @@ import tkinter as tk
 
 
 def press_key(event):
-    print(event.char)
+    print(event)
     if event.char.isdigit():
         add_digit(event.char)
+    elif event.char in "+-*/":
+        add_digit(event.char)
+    elif event == "\r" or "=":
+        calc_button()
+
+
+def calc_button():
+    value = calc.get()
+    calc.delete(0, tk.END)
+    calc.insert(0, eval(value))
+
+
+def add_operation(operation):
+    value = calc.get()
+    if value[0] == "0":
+        value = value[1:]
+    calc.delete(0, tk.END)
+    calc.insert(0, value + operation)
 
 
 def add_digit(digit):
@@ -25,12 +43,16 @@ def get_operation_button(operation):
     # TODO: Provide the functionality of the digit buttons.
 
     return tk.Button(
-        root, text=operation, font=("Calibri", 13), borderwidth=3, foreground="red"
+        root,
+        text=operation,
+        font=("Calibri", 13),
+        borderwidth=3,
+        foreground="red",
+        command=lambda: add_operation(operation),
     )
 
 
 def get_calc_button(op):
-    # TODO: Provide the functionality of the operation buttons.
     return tk.Button(
         root,
         text=op,
@@ -38,11 +60,11 @@ def get_calc_button(op):
         borderwidth=3,
         bg="grey",
         foreground="red",
+        command=lambda: calc_button(),
     )
 
 
 def get_digit_button(digit):
-    # TODO: Provide the functionality of the digit buttons
     return tk.Button(
         root,
         text=digit,
