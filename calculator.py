@@ -1,4 +1,5 @@
 import tkinter as tk
+from math import sqrt
 
 
 def press_key(event):
@@ -8,6 +9,23 @@ def press_key(event):
         add_digit(event.char)
     elif event == "\r" or "=":
         calc_button()
+
+
+def extra_math_operations(operation):
+    value = calc.get()
+    if operation == "sqrt":
+        calc.delete(0, tk.END)
+        calc.insert(0, str(sqrt(float(eval(value)))))
+
+    elif operation == "x^2":
+        calc.delete(0, tk.END)
+        calc.insert(0, eval(value) ** 2)
+
+
+def percent():
+    value = calc.get()
+    calc.delete(0, tk.END)
+    calc.insert(0, eval(value) / 100)
 
 
 def clear():
@@ -57,6 +75,28 @@ def get_operation_button(operation):
         borderwidth=3,
         foreground="red",
         command=lambda: add_operation(operation),
+    )
+
+
+def get_extra_math_operations_button(operation):
+    return tk.Button(
+        root,
+        text=operation,
+        font=("Calibri", 13),
+        borderwidth=3,
+        foreground="red",
+        command=lambda: extra_math_operations(operation),
+    )
+
+
+def get_percent_button(pcnt):
+    return tk.Button(
+        root,
+        text=pcnt,
+        font=("Calibri", 13),
+        borderwidth=3,
+        foreground="red",
+        command=lambda: percent(),
     )
 
 
@@ -178,9 +218,18 @@ get_operation_button("+").grid(row=5, column=3, sticky="wens", padx=3, pady=3)
 
 get_calc_button("=").grid(row=6, column=3, sticky="wens", padx=3, pady=3)
 
-get_calc_button("sqrt").grid(row=2, column=2, sticky="we", padx=3, pady=3)
-get_calc_button("x^2").grid(row=2, column=1, sticky="we", padx=3, pady=3)
-get_calc_button("%").grid(row=2, column=0, sticky="we", padx=3, pady=3)
+# Extra math operations buttons widget
+
+get_extra_math_operations_button("sqrt").grid(
+    row=2, column=2, sticky="we", padx=3, pady=3
+)
+get_extra_math_operations_button("x^2").grid(
+    row=2, column=1, sticky="we", padx=3, pady=3
+)
+
+# Percent button widget
+
+get_percent_button("%").grid(row=2, column=0, sticky="we", padx=3, pady=3)
 
 # Grid root's columns and rows configuration
 
