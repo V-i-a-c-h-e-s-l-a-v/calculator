@@ -7,14 +7,14 @@ def press_key(event):
     print(event)
     if event.char.isdigit():
         add_digit(event.char)
-    elif event.char == "\x1b":
-        clear()
-    elif event.char in "+-*/.":
+    elif event.char == ".":
+        add_decimal_point(event.char)
+    elif event.char in "+-*/":
         add_operation(event.char)
-    elif event == "\r" or "=":
+    elif event.keysym == "Escape":
+        clear()
+    elif event.keysym in ["Return", "KP_Enter", "equal"]:
         basic_calculation()
-    elif event == ".":
-        get_decimal_pot_button(event.char)
 
 
 def extra_math_operations(operation):
@@ -53,14 +53,27 @@ def basic_calculation():
     value = calc.get()
     if value[-1] in "+-/*":
         value = value[:-1] + value[-1] + value[:-1]
+        calc.delete(0, tk.END)
+        calc.insert(0, eval(value))q
+
     calc.delete(0, tk.END)
     calc.insert(0, eval(value))
 
 
-def add_decimal_pot(pot):
+def add_decimal_point(point):
     value = calc.get()
-    calc.delete(0, tk.END)
-    calc.insert(0, value + pot)
+    if value == "0":
+        value = value + point
+        calc.delete(0, tk.END)
+        calc.insert(0, value[1:])
+
+    if value != "0" and value.count(".") == 0:
+        calc.delete(0, tk.END)
+        calc.insert(0, value + point)
+
+    if any(item in "+-/*" for item in value) and value.count(".") < 2:
+        calc.delete(0, tk.END)
+        calc.insert(0, value + point)
 
 
 def add_operation(operation):
@@ -77,7 +90,7 @@ def add_operation(operation):
         calc.insert(len(value) - 1, operation)
 
     if (
-        len(value) >= 3
+        (len(value) - value.count(".")) >= 3
         and any(item in "+-/*" for item in value)
         and value[0] not in "+-/*"
     ):
@@ -86,7 +99,9 @@ def add_operation(operation):
         calc.insert(0, str(value) + operation)
 
     elif (
-        len(value) >= 4 and any(item in "+-/*" for item in value) and value[0] in "+-/*"
+        (len(value) - value.count(".")) >= 3
+        and any(item in "+-/*" for item in value)
+        and value[0] in "+-/*"
     ):
         value = eval(value)
         calc.delete(0, tk.END)
@@ -177,14 +192,14 @@ def get_sign_button(param):
     )
 
 
-def get_decimal_pot_button(pot):
+def get_decimal_point_button(point):
     return tk.Button(
         root,
-        text=pot,
+        text=point,
         font=("Arial", 13),
         borderwidth=3,
         foreground="blue",
-        command=lambda: add_decimal_pot(pot),
+        command=lambda: add_decimal_point(point),
     )
 
 
@@ -243,9 +258,9 @@ get_digit_button("0").grid(row=6, column=1, sticky="wens", padx=3, pady=3)
 
 get_sign_button("+/-").grid(row=6, column=0, sticky="wens", padx=3, pady=3)
 
-# Decimal pot button widget
+# Decimal point button widget
 
-get_decimal_pot_button(".").grid(row=6, column=2, sticky="wens", padx=3, pady=3)
+get_decimal_point_button(".").grid(row=6, column=2, sticky="wens", padx=3, pady=3)
 
 # Clear button widget
 
