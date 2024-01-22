@@ -50,14 +50,17 @@ def sign_switcher():
 
 
 def basic_calculation():
-    value = calc.get()
-    if value[-1] in "+-/*":
-        value = value[:-1] + value[-1] + value[:-1]
-        calc.delete(0, tk.END)
-        calc.insert(0, eval(value))q
+    try:
+        value = calc.get()
+        if value[-1] in "+-/*":
+            value = value[:-1] + value[-1] + value[:-1]
+            calc.delete(0, tk.END)
+            calc.insert(0, eval(value))
 
-    calc.delete(0, tk.END)
-    calc.insert(0, eval(value))
+        calc.delete(0, tk.END)
+        calc.insert(0, eval(value))
+    except ZeroDivisionError:
+        messagebox.showerror("Error", "ZeroDivisionError")
 
 
 def add_decimal_point(point):
