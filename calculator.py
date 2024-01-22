@@ -1,25 +1,35 @@
 import tkinter as tk
+from tkinter import messagebox
 from math import sqrt
 
 
 def press_key(event):
+    print(event)
     if event.char.isdigit():
         add_digit(event.char)
+    elif event.char == "\x1b":
+        clear()
     elif event.char in "+-*/.":
-        add_digit(event.char)
+        add_operation(event.char)
     elif event == "\r" or "=":
-        calc_button()
+        basic_calculation()
+    elif event == ".":
+        get_decimal_pot_button(event.char)
 
 
 def extra_math_operations(operation):
-    value = calc.get()
-    if operation == "sqrt":
-        calc.delete(0, tk.END)
-        calc.insert(0, str(sqrt(float(eval(value)))))
+    try:
+        value = calc.get()
+        if operation == "sqrt":
+            calc.delete(0, tk.END)
+            calc.insert(0, str(sqrt(float(eval(value)))))
 
-    elif operation == "x^2":
-        calc.delete(0, tk.END)
-        calc.insert(0, eval(value) ** 2)
+        elif operation == "x^2":
+            calc.delete(0, tk.END)
+            calc.insert(0, eval(value) ** 2)
+    except ValueError:
+        messagebox.showerror("ValueError:", "Math domain error")
+        calc.insert(0, "Error")
 
 
 def percent():
@@ -39,26 +49,59 @@ def sign_switcher():
     calc.insert(0, -1 * eval(value))
 
 
-def calc_button():
+def basic_calculation():
     value = calc.get()
+    if value[-1] in "+-/*":
+        value = value[:-1] + value[-1] + value[:-1]
     calc.delete(0, tk.END)
     calc.insert(0, eval(value))
 
 
+def add_decimal_pot(pot):
+    value = calc.get()
+    calc.delete(0, tk.END)
+    calc.insert(0, value + pot)
+
+
 def add_operation(operation):
     value = calc.get()
-    if value[0] == "0":
-        value = value[1:]
-    calc.delete(0, tk.END)
-    calc.insert(0, value + operation)
+    if value == "0" and len(value) == 1:
+        calc.delete(0, tk.END)
+        calc.insert(0, value)
+    else:
+        calc.delete(0, tk.END)
+        calc.insert(0, value + operation)
+
+    if value[-1] in "+-/*" and operation in "+-/*":
+        calc.delete(len(value) - 1, tk.END)
+        calc.insert(len(value) - 1, operation)
+
+    if (
+        len(value) >= 3
+        and any(item in "+-/*" for item in value)
+        and value[0] not in "+-/*"
+    ):
+        value = eval(value)
+        calc.delete(0, tk.END)
+        calc.insert(0, str(value) + operation)
+
+    elif (
+        len(value) >= 4 and any(item in "+-/*" for item in value) and value[0] in "+-/*"
+    ):
+        value = eval(value)
+        calc.delete(0, tk.END)
+        calc.insert(0, str(value) + operation)
 
 
 def add_digit(digit):
     value = calc.get()
-    if value[0] == "0":
-        value = value[1:]
-    calc.delete(0, tk.END)
-    calc.insert(0, value + digit)
+    if value == "0":
+        value = value + digit
+        calc.delete(0, tk.END)
+        calc.insert(0, value[1:])
+    else:
+        calc.delete(0, tk.END)
+        calc.insert(0, value + digit)
 
 
 def get_memory_button(memory_mode):
@@ -108,7 +151,7 @@ def get_calc_button(op):
         borderwidth=3,
         bg="grey",
         foreground="red",
-        command=lambda: calc_button(),
+        command=lambda: basic_calculation(),
     )
 
 
@@ -141,7 +184,7 @@ def get_decimal_pot_button(pot):
         font=("Arial", 13),
         borderwidth=3,
         foreground="blue",
-        command=lambda: add_digit(pot),
+        command=lambda: add_decimal_pot(pot),
     )
 
 
@@ -171,6 +214,7 @@ root.bind("<Key>", press_key)
 calc = tk.Entry(root, justify=tk.RIGHT, width=15, font=("Arial", 15))
 calc.grid(row=0, column=0, stick="we", columnspan=4, padx=5, pady=5)
 calc.insert(0, "0")
+
 
 # Memory button widgets
 
@@ -239,5 +283,7 @@ for y in range(5):
 for x in range(7):
     root.grid_rowconfigure(x, minsize=60)
 
+root.mainloop()
+
 if __name__ == "__main__":
-    root.mainloop()
+    pass
