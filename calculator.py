@@ -207,16 +207,6 @@ def get_m_subtract_button(memory_mode):
     )
 
 
-def get_memory_button(memory_mode):
-    return tk.Button(
-        root,
-        text=memory_mode,
-        font=("Calibri", 10),
-        foreground="green",
-        command=lambda: memory_store(),
-    )
-
-
 def get_operation_button(operation):
     return tk.Button(
         root,
