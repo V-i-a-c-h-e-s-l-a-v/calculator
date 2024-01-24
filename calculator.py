@@ -30,7 +30,7 @@ def memory_recall():
         calc.insert(0, value[1:])
     else:
         calc.delete(0, tk.END)
-        calc.insert(0, value + memory_storage)
+        calc.insert(0, memory_storage)
 
 
 def memory_store():
