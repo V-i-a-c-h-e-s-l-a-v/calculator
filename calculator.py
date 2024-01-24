@@ -28,6 +28,9 @@ def memory_recall():
         value = value + memory_storage
         calc.delete(0, tk.END)
         calc.insert(0, value[1:])
+    elif value[-1] in "+-*/":
+        calc.delete(0, tk.END)
+        calc.insert(0, value + memory_storage)
     else:
         calc.delete(0, tk.END)
         calc.insert(0, memory_storage)
@@ -388,4 +391,4 @@ for x in range(3, 8):
 root.mainloop()
 
 if __name__ == "__main__":
-    pass
+    root.mainloop()
