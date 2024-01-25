@@ -42,6 +42,9 @@ def memory_recall():
     Command for 'MR' button to add the value of the global var. 'memory_storage' to the Entry widget (var. 'calc')
     :return: Nothing
     """
+    # TODO:  MR button replaces the current 'Entry' widget value on the new one.It'd be better to implement
+    # an additional functionality. If next to digit is a math sign when using button "MR" adds the value of
+    # the global var. 'memory_storage' to the 'Entry' widget value.
     global memory_storage
     value = calc.get()
 
@@ -63,7 +66,13 @@ def memory_store():
     :return: Global var. 'memory_storage'.
     """
     global memory_storage
-    memory_storage = calc.get()
+    value = calc.get()
+    # Using 'MS' button to storage digits only not digits and math signs
+    # (after digit) or expression which has the math signs between digits.
+    if any(item in "+-*/" for item in value[1:]):  # A negative number is possible.
+        memory_storage = "0"
+    else:
+        memory_storage = calc.get()
 
 
 def press_key(event):
@@ -127,7 +136,7 @@ def clear():
 
 def sign_switcher():
     """
-     Command of "+/-" button to switch sign of the 'Entry' widget value (method 'calc').
+    Command of "+/-" button to switch sign of the 'Entry' widget value (method 'calc').
     :return: Nothing
     """
     # TODO: There is a bug. If the 'Entry' widget value is 'digit and sign' the function returns message 'SyntaxError'.
