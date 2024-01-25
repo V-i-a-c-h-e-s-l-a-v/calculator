@@ -171,12 +171,12 @@ def add_decimal_point(point):
     :return: Nothing
     """
     value = calc.get()
-    if value == "0":
+    if value[0] == "0":  # To omit the start zero.
         value = value + point
         calc.delete(0, tk.END)
         calc.insert(0, value[1:])
 
-    if value != "0" and value.count(".") == 0:
+    if value != "0" and value.count(".") == 0:  # Each digit can have one decimal point only
         calc.delete(0, tk.END)
         calc.insert(0, value + point)
 
