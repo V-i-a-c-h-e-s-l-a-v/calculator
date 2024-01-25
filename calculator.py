@@ -2,25 +2,46 @@ import tkinter as tk
 from tkinter import messagebox
 from math import sqrt
 
-memory_storage = ""
+memory_storage = ""  # Get value from M-buttons.
 
 
 def memory_add():
+    """
+    Command for 'M+' button to add value from Entry widget (var. 'calc') to the value
+    of the global var. 'memory_storage'.
+
+    :return: Global var. 'memory_storage'.
+    """
     global memory_storage
     memory_storage = str(eval(f"{calc.get()} + {memory_storage}"))
 
 
 def memory_subtract():
+    """
+    Command for 'M-' button to subtract value from Entry widget (var. 'calc') from the value
+    of the global var. 'memory_storage'.
+
+    :return: Global var. 'memory_storage'.
+    """
     global memory_storage
     memory_storage = str(eval(f"{memory_storage} - {calc.get()}"))
 
 
 def memory_clear():
+    """
+    Command for 'MC' button to clear the value of the global var. 'memory_storage' (add empty string).
+
+    :return: Global var. 'memory_storage'.
+    """
     global memory_storage
     memory_storage = ""
 
 
 def memory_recall():
+    """
+    Command for 'MR' button to add the value of the global var. 'memory_storage' to the Entry widget (var. 'calc')
+    :return: Nothing
+    """
     global memory_storage
     value = calc.get()
 
@@ -37,11 +58,20 @@ def memory_recall():
 
 
 def memory_store():
+    """
+    Command for 'MS' button to pass the value of the Entry widget (var. calc) to the global var. memory_storage.
+    :return: Global var. 'memory_storage'.
+    """
     global memory_storage
     memory_storage = calc.get()
 
 
 def press_key(event):
+    """
+    Getting the keyboard buttons binds for some buttons of the GUI.
+    :param event: Event means pressing of the keyboard button.
+    :return: Nothing
+    """
     print(event)
     if event.char.isdigit():
         add_digit(event.char)
@@ -56,6 +86,12 @@ def press_key(event):
 
 
 def extra_math_operations(operation):
+    """
+    Command for 'sqrt' and 'x^2' buttons.
+
+    :param operation:
+    :return: Nothing
+    """
     try:
         value = calc.get()
         if operation == "sqrt":
@@ -71,23 +107,41 @@ def extra_math_operations(operation):
 
 
 def percent():
+    """
+    Command for '%' button.
+    :return:
+    """
     value = calc.get()
     calc.delete(0, tk.END)
     calc.insert(0, eval(value) / 100)
 
 
 def clear():
+    """
+    Command of "C" button to clear value of the 'Entry' widget (method 'calc').
+    :return:
+    """
     calc.delete(0, tk.END)
     calc.insert(0, "0")
 
 
 def sign_switcher():
+    """
+     Command of "+/-" button to switch sign of the 'Entry' widget value (method 'calc').
+    :return: Nothing
+    """
+    # TODO: There is a bug. If the 'Entry' widget value is 'digit and sign' the function returns message 'SyntaxError'.
     value = calc.get()
     calc.delete(0, tk.END)
     calc.insert(0, -1 * eval(value))
 
 
 def basic_calculation():
+    """
+    Command of "=" button to complete current 'Entry' widget value (method 'calc')
+    calculation and pass the result to the method 'calc'.
+    :return: Nothing
+    """
     try:
         value = calc.get()
         if value[-1] in "+-/*":
@@ -102,6 +156,11 @@ def basic_calculation():
 
 
 def add_decimal_point(point):
+    """
+    Command of "." button.
+    :param point:
+    :return: Nothing
+    """
     value = calc.get()
     if value == "0":
         value = value + point
@@ -118,6 +177,11 @@ def add_decimal_point(point):
 
 
 def add_operation(operation):
+    """
+    Command of "+", "-", "*", "." buttons.
+    :param operation:
+    :return: Nothing
+    """
     value = calc.get()
     if value == "0" and len(value) == 1:
         calc.delete(0, tk.END)
@@ -150,6 +214,11 @@ def add_operation(operation):
 
 
 def add_digit(digit):
+    """
+    Command of digit buttons.
+    :param digit:
+    :return: Nothing
+    """
     value = calc.get()
     if value == "0":
         value = value + digit
@@ -161,6 +230,11 @@ def add_digit(digit):
 
 
 def get_ms_button(memory_mode):
+    """
+    Getting "MS" button widget.
+    :param memory_mode:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=memory_mode,
@@ -171,6 +245,11 @@ def get_ms_button(memory_mode):
 
 
 def get_mr_button(memory_mode):
+    """
+    Getting "MR" button widget.
+    :param memory_mode:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=memory_mode,
@@ -181,6 +260,12 @@ def get_mr_button(memory_mode):
 
 
 def get_mc_button(memory_mode):
+    """
+    Getting "MR" button widget.
+    :param memory_mode:
+    :return: Tkinter button widget.
+    """
+
     return tk.Button(
         root,
         text=memory_mode,
@@ -191,6 +276,12 @@ def get_mc_button(memory_mode):
 
 
 def get_m_add_button(memory_mode):
+    """
+    Getting "M+" button widget.
+    :param memory_mode:
+    :return: Tkinter button widget.
+    """
+
     return tk.Button(
         root,
         text=memory_mode,
@@ -201,6 +292,11 @@ def get_m_add_button(memory_mode):
 
 
 def get_m_subtract_button(memory_mode):
+    """
+    Getting "M-" button widget.
+    :param memory_mode:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=memory_mode,
@@ -211,6 +307,11 @@ def get_m_subtract_button(memory_mode):
 
 
 def get_operation_button(operation):
+    """
+    Getting "+", "-", "*", "/" buttons widget.
+    :param operation:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=operation,
@@ -222,6 +323,11 @@ def get_operation_button(operation):
 
 
 def get_extra_math_operations_button(operation):
+    """
+    Getting "sqrt" and "x^2" buttons widget.
+    :param operation:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=operation,
@@ -233,6 +339,11 @@ def get_extra_math_operations_button(operation):
 
 
 def get_percent_button(pcnt):
+    """
+    Getting "%" button widget.
+    :param pcnt:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=pcnt,
@@ -244,6 +355,11 @@ def get_percent_button(pcnt):
 
 
 def get_calc_button(op):
+    """
+    Getting "=" button widget.
+    :param op:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=op,
@@ -256,6 +372,11 @@ def get_calc_button(op):
 
 
 def get_digit_button(digit):
+    """
+    Getting "Digit" button widget.
+    :param digit:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=digit,
@@ -267,6 +388,12 @@ def get_digit_button(digit):
 
 
 def get_sign_button(param):
+    """
+    Getting "+/-" button widget.
+    :param param:
+    :return: Tkinter button widget.
+    """
+
     return tk.Button(
         root,
         text=param,
@@ -278,6 +405,11 @@ def get_sign_button(param):
 
 
 def get_decimal_point_button(point):
+    """
+    Getting "." button widget.
+    :param point:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=point,
@@ -289,6 +421,11 @@ def get_decimal_point_button(point):
 
 
 def get_clear_button(operation):
+    """
+    Getting "C" button widget.
+    :param operation:
+    :return: Tkinter button widget.
+    """
     return tk.Button(
         root,
         text=operation,
@@ -305,7 +442,7 @@ root.title("Calculator")
 
 root.resizable(False, False)
 
-# Getting binds for some buttons
+# Getting the keyboard buttons binds for some buttons of the GUI
 
 root.bind("<Key>", press_key)
 
