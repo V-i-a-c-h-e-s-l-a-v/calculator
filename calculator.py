@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from math import sqrt
 
-memory_storage = ""  # Gets the value from M-buttons.
+memory_storage = "0"  # Gets the value from M-buttons. Default value is '0'.
 
 
 def memory_add():
@@ -12,9 +12,13 @@ def memory_add():
 
     :return: Global var. 'memory_storage'.
     """
-    # TODO: Here is a bug
     global memory_storage
-    memory_storage = str(eval(f"{calc.get()} + {memory_storage}"))
+    value = calc.get()
+    if value[-1] in "+-/*":
+        # Global var. 'memory_storage' should only be assigned a numerical value.
+        messagebox.showerror("Error", "SyntaxError")
+    else:
+        memory_storage = str(eval(f"{value} + {memory_storage}"))
 
 
 def memory_subtract():
@@ -24,19 +28,24 @@ def memory_subtract():
 
     :return: Global var. 'memory_storage'.
     """
-    # TODO: Here is a bug
+
     global memory_storage
-    memory_storage = str(eval(f"{memory_storage} - {calc.get()}"))
+    value = calc.get()
+    if value[-1] in "+-/*":
+        # Global var. 'memory_storage' should only be assigned a numerical value.
+        messagebox.showerror("Error", "SyntaxError")
+    else:
+        memory_storage = str(eval(f"{value} - {calc.get()}"))
 
 
 def memory_clear():
     """
-    Command for the 'MC' button: reset the value of the global var. 'memory_storage' (set to empty string).
+    Command for the 'MC' button: reset the value of the global var. 'memory_storage' (set default value: '0').
 
     :return: Global var. 'memory_storage'.
     """
     global memory_storage
-    memory_storage = ""
+    memory_storage = "0"
 
 
 def memory_recall():
@@ -44,9 +53,7 @@ def memory_recall():
     Command for the 'MR' button: add the value of the global var. 'memory_storage' to the Entry widget (var. 'calc')
     :return: Nothing
     """
-    # TODO:  MR button replaces the current 'Entry' widget value on the new one. It'd be better to implement
-    # an additional functionality. If next to digit is a mathematical symbol when using button "MR" adds the value of
-    # the global var. 'memory_storage' to the 'Entry' widget value.
+
     global memory_storage
     value = calc.get()
 
@@ -69,10 +76,10 @@ def memory_store():
     """
     global memory_storage
     value = calc.get()
-    # Using 'MS' button to storage digits only not digits and mathematical symbols
-    # (after digit) or expression which has the mathematical symbols between digits.
-    if any(item in "+-*/" for item in value[1:]):  # A negative number is possible.
-        memory_storage = "0"
+    # Global var. 'memory_storage' should only be assigned a numerical value.
+    if value[-1] in "+-/*":
+        # Global var. 'memory_storage' should only be assigned a numerical value.
+        messagebox.showerror("Error", "SyntaxError")
     else:
         memory_storage = calc.get()
 
@@ -141,10 +148,14 @@ def sign_switcher():
     Command for the "+/-" button: switch negative/positive symbols of the 'Entry' widget value (method 'calc').
     :return: Nothing
     """
-    # TODO: Here is a bug. If the 'Entry' widget value is 'digit and symbol' the function returns message 'SyntaxError'.
+
     value = calc.get()
-    calc.delete(0, tk.END)
-    calc.insert(0, -1 * eval(value))
+    if len(value) >= 2 and value[-1] in "+-/*":
+        # Otherwise the func. 'eval' returns "SyntaxError" and  interrupt the script execution.
+        messagebox.showerror("Error", "SyntaxError")
+    else:
+        calc.delete(0, tk.END)
+        calc.insert(0, -1 * eval(value))
 
 
 def basic_calculation():
